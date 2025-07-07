@@ -10,6 +10,7 @@ pipeline {
     environment {
         DOCKER_REGISTRY = 'docker.io/mycompany'
         DOCKER_CREDS = 'docker-hub-creds'
+        KUBECONFIG_CRED = 'jenkins-kubeconfig'
     }
 
     stages {
@@ -57,9 +58,11 @@ pipeline {
 
         stage('Deploy to Dev') {
             steps {
-                sh 'kubectl apply -k manifests/overlays/dev'
-                sh 'kubectl -n studio-app-dev rollout status deploy/flask'
-                sh 'kubectl -n studio-app-dev rollout status deploy/react'
+                withCredentials([file(credentialsId: env.KUBECONFIG_CRED, variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -k manifests/overlays/dev'
+                    sh 'kubectl -n studio-app-dev rollout status deploy/flask'
+                    sh 'kubectl -n studio-app-dev rollout status deploy/react'
+                }
                 dir('app') {
                     sh 'pytest -m smoke'
                 }
@@ -72,9 +75,11 @@ pipeline {
             }
             steps {
                 input message: 'Deploy to production?'
-                sh 'kubectl apply -k manifests/overlays/prod'
-                sh 'kubectl -n studio-app-prod rollout status deploy/flask'
-                sh 'kubectl -n studio-app-prod rollout status deploy/react'
+                withCredentials([file(credentialsId: env.KUBECONFIG_CRED, variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -k manifests/overlays/dev'
+                    sh 'kubectl -n studio-app-dev rollout status deploy/flask'
+                    sh 'kubectl -n studio-app-dev rollout status deploy/react'
+                }
             }
         }
     }
