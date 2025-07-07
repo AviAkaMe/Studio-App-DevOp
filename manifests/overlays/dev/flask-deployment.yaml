@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: flask
+        image: mycompany/flask-app:dev

@@ -1,0 +1,7 @@
+namespace: studio-app-prod
+resources:
+  - ../../base
+patchesStrategicMerge:
+  - flask-deployment.yaml
+  - react-deployment.yaml
+  - postgres-deployment.yaml

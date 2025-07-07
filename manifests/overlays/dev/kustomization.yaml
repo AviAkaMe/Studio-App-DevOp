@@ -1,0 +1,8 @@
+namespace: studio-app-dev
+resources:
+  - ../../base
+patchesStrategicMerge:
+  - app-configmap.yaml
+  - flask-deployment.yaml
+  - react-deployment.yaml
+  - ingress.yaml
