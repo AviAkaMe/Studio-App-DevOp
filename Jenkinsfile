@@ -120,9 +120,9 @@ pipeline {
                 input message: 'Deploy to production?'
                 withCredentials([file(credentialsId: env.KUBECONFIG_CRED, variable: 'KUBECONFIG')]) {
                     // Apply the production overlay and wait for rollouts
-                    sh 'kubectl apply -k manifests/overlays/dev'
-                    sh 'kubectl -n studio-app-dev rollout status deploy/flask'
-                    sh 'kubectl -n studio-app-dev rollout status deploy/react'
+                    sh 'kubectl apply -k manifests/overlays/prod'
+                    sh 'kubectl -n studio-app-prod rollout status deploy/flask'
+                    sh 'kubectl -n studio-app-prod rollout status deploy/react'
                 }
             }
         }

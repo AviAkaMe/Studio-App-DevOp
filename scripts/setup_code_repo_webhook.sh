@@ -18,4 +18,4 @@ HOOK_URL="$4" # full URL Jenkins listens on
 curl -H "Authorization: token ${TOKEN}" \ 
      -H "Content-Type: application/json" \ 
      -X POST "https://api.github.com/repos/${OWNER}/${REPO}/hooks" \ 
-     -d '{"name":"web","active":true,"events":["push"],"config":{"url":"'${HOOK_URL}'","content_type":"json"}}'
+     -d '{"name":"web","active":true,"events":["push"],"config":{"url":"${HOOK_URL}","content_type":"json"}}'
