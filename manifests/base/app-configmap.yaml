@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: studio-app
+data:
+  APP_ENV: "production"
+  REACT_APP_API_URL: "https://studio.example.com/api"

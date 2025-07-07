@@ -1,0 +1,10 @@
+namespace: studio-app
+resources:
+  - app-configmap.yaml
+  - postgres-secret.yaml
+  - flask-deployment.yaml
+  - react-deployment.yaml
+  - postgres-deployment.yaml
+  - backend-service.yaml
+  - frontend-service.yaml
+  - ingress.yaml
