@@ -1,9 +1,11 @@
+# Deployment for the Flask backend application
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask
   namespace: studio-app
 spec:
+  # Run two replicas for high availability
   replicas: 2
   selector:
     matchLabels:
@@ -16,13 +18,14 @@ spec:
       containers:
       - name: flask
         image: mycompany/flask-app:latest
+        # Expose port 5000 where the Flask app listens
         ports:
         - containerPort: 5000
         envFrom:
         - configMapRef:
-            name: app-config
+            name: app-config         # general app settings
         - secretRef:
-            name: postgres-credentials
+            name: postgres-credentials  # database credentials
         resources:
           requests:
             cpu: "100m"
@@ -30,6 +33,7 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
+        # Check endpoints to know when the container is ready and healthy
         readinessProbe:
           httpGet:
             path: /healthz

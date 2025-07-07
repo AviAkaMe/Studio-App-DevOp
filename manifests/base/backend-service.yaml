@@ -1,12 +1,14 @@
+# Exposes the Flask backend inside the cluster
 apiVersion: v1
 kind: Service
 metadata:
   name: backend
   namespace: studio-app
 spec:
+  # ClusterIP makes the service reachable only within the cluster
   type: ClusterIP
   selector:
     app: flask
   ports:
-  - port: 80
-    targetPort: 5000
+  - port: 80       # service port
+    targetPort: 5000  # container port of the Flask app

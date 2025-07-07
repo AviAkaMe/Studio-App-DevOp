@@ -1,11 +1,13 @@
+# Production override for the React deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react
 spec:
+  # Run three replicas in production
   replicas: 3
   template:
     spec:
       containers:
       - name: react
-        image: mycompany/react-app:v1.0.0
+        image: mycompany/react-app:v1.0.0  # versioned image

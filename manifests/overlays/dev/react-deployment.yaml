@@ -1,11 +1,13 @@
+# Development override for the React deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react
 spec:
+  # Only one replica in development
   replicas: 1
   template:
     spec:
       containers:
       - name: react
-        image: mycompany/react-app:dev
+        image: mycompany/react-app:dev   # use the dev-tagged image

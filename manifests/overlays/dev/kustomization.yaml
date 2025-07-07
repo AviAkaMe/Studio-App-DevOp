@@ -1,3 +1,4 @@
+# Kustomize overlay for the development environment
 namespace: studio-app-dev
 resources:
   - ../../base

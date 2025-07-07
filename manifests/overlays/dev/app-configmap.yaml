@@ -1,8 +1,9 @@
+# Overrides for dev environment configuration
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
 
 data:
-  APP_ENV: "development"
+  APP_ENV: "development"                         # run in dev mode
   REACT_APP_API_URL: "http://studio-dev.example.com/api"

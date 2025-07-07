@@ -1,10 +1,11 @@
+# Deployment for the React frontend
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react
   namespace: studio-app
 spec:
-  replicas: 2
+  replicas: 2            # two copies of the frontend
   selector:
     matchLabels:
       app: react
@@ -16,11 +17,12 @@ spec:
       containers:
       - name: react
         image: mycompany/react-app:latest
+        # React app listens on port 3000
         ports:
         - containerPort: 3000
         envFrom:
         - configMapRef:
-            name: app-config
+            name: app-config      # exposes APP_ENV and other vars
         resources:
           requests:
             cpu: "100m"
@@ -28,6 +30,7 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
+        # Health checks for Kubernetes
         readinessProbe:
           httpGet:
             path: /

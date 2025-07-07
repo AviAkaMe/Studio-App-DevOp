@@ -1,3 +1,4 @@
+# Kustomize overlay for the production environment
 namespace: studio-app-prod
 resources:
   - ../../base

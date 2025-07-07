@@ -1,3 +1,4 @@
+# Service exposing Prometheus inside the cluster
 apiVersion: v1
 kind: Service
 metadata:

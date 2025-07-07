@@ -1,8 +1,11 @@
+# Configuration values shared by all environments
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
   namespace: studio-app
 data:
+  # Application mode
   APP_ENV: "production"
+  # URL that the React frontend uses to reach the API
   REACT_APP_API_URL: "https://studio.example.com/api"

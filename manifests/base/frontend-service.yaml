@@ -1,3 +1,4 @@
+# Service to expose the React frontend within the cluster
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,5 +9,5 @@ spec:
   selector:
     app: react
   ports:
-  - port: 80
-    targetPort: 3000
+  - port: 80          # incoming port
+    targetPort: 3000  # container port of the React app

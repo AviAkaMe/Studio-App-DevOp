@@ -1,11 +1,13 @@
+# Production override for the Flask deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask
 spec:
+  # Scale out in production
   replicas: 3
   template:
     spec:
       containers:
       - name: flask
-        image: mycompany/flask-app:v1.0.0
+        image: mycompany/flask-app:v1.0.0  # pinned release

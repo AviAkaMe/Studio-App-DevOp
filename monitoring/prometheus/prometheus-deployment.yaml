@@ -5,7 +5,7 @@ metadata:
   labels:
     app: prometheus
 spec:
-  replicas: 1
+  replicas: 1                # single Prometheus instance
   selector:
     matchLabels:
       app: prometheus
@@ -27,4 +27,4 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: prometheus-config
+            name: prometheus-config   # load configuration from the configmap

@@ -1,8 +1,10 @@
+# Development override for the Flask deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask
 spec:
+  # Only one replica in development
   replicas: 1
   template:
     spec:

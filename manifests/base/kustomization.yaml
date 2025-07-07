@@ -1,3 +1,4 @@
+# Kustomize base defining all application components
 namespace: studio-app
 resources:
   - app-configmap.yaml

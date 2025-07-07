@@ -1,6 +1,8 @@
+# Production override for the Postgres deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
 spec:
+  # Increase replica count in production
   replicas: 2

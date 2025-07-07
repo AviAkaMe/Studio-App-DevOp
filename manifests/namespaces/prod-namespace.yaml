@@ -1,3 +1,4 @@
+# Namespace for the production environment
 apiVersion: v1
 kind: Namespace
 metadata:

@@ -1,3 +1,4 @@
+# Prometheus configuration
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5,6 +6,7 @@ metadata:
   labels:
     app: prometheus
 data:
+  # Main Prometheus configuration file
   prometheus.yml: |
     global:
       scrape_interval: 15s

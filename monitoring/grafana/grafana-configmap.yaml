@@ -1,4 +1,5 @@
-tapiVersion: v1
+# Dashboards and provisioning configuration for Grafana
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-dashboards
@@ -6,6 +7,7 @@ metadata:
     app: grafana
     grafana_dashboard: "1"
 data:
+  # Configures how Grafana loads dashboards from files
   provider.yaml: |
     apiVersion: 1
     providers:
