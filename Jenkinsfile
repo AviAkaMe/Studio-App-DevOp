@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    triggers {
+        // Rebuild when this repository receives a GitHub push
+        githubPush()
+    }
+
     parameters {
         string(name: 'CODE_REPO_URL', defaultValue: 'https://github.com/myorg/app.git', description: 'Git URL of the application repository')
         string(name: 'CODE_REPO_BRANCH', defaultValue: 'main', description: 'Branch of the application repository')
@@ -19,6 +24,20 @@ pipeline {
                 checkout scm
                 dir('app') {
                     git url: params.CODE_REPO_URL, branch: params.CODE_REPO_BRANCH
+                }
+            }
+        }
+
+        stage('Detect DevOps Changes') {
+            steps {
+                script {
+                    def diffCmd = "git rev-parse --verify HEAD^ >/dev/null 2>&1 && git diff --name-only HEAD^ HEAD || git show --pretty='' --name-only HEAD"
+                    def changes = sh(script: diffCmd, returnStdout: true).trim()
+                    if (!changes.matches('(Jenkinsfile|manifests/).*')) {
+                        echo 'No changes to manifests or Jenkinsfile detected. Skipping build.'
+                        currentBuild.result = 'NOT_BUILT'
+                        error('No relevant changes')
+                    }
                 }
             }
         }
