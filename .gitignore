@@ -1,0 +1,3 @@
+admin-full.yaml
+*.pem
+jenkins-sa.kubeconfig
