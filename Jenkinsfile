@@ -26,7 +26,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_REGISTRY = 'docker.io/avit83'
+        DOCKER_REGISTRY = 'avit83'
         DOCKER_CREDS    = 'docker-hub-creds'
         KUBECONFIG_CRED = 'jenkins-kubeconfig'
     }
@@ -96,18 +96,19 @@ pipeline {
             steps {
                 dir('app') {
                     script {
-                        // build with BUILD_NUMBER for immutability
-                        def flaskImage = docker.build(
-                          "${DOCKER_REGISTRY}/backend:${env.BUILD_NUMBER}",
-                          'backend'
-                        )
-                        def reactImage = docker.build(
-                          "${DOCKER_REGISTRY}/frontend:${env.BUILD_NUMBER}",
-                          'frontend'
-                        )
-
-                        docker.withRegistry('', DOCKER_CREDS) {
+                        docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDS) {
+                            // build & push backend
+                            def flaskImage = docker.build(
+                      "${DOCKER_REGISTRY}/backend:${env.BUILD_NUMBER}",
+                      'backend'
+                    )
                             flaskImage.push()
+
+                            // build & push frontend
+                            def reactImage = docker.build(
+                      "${DOCKER_REGISTRY}/frontend:${env.BUILD_NUMBER}",
+                      'frontend'
+                    )
                             reactImage.push()
                         }
                     }
