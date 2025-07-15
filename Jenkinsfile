@@ -68,14 +68,26 @@ pipeline {
             agent any
             steps {
                 dir('app') {
-                    // Create & activate venv
                     sh 'python3 -m venv venv'
                     sh '. venv/bin/activate && pip install --upgrade pip flake8 pytest'
-                    // Only lint your code, exclude venv/ and node_modules/
-                    sh '. venv/bin/activate && flake8 . --exclude venv,node_modules'
-                    sh '. venv/bin/activate && pytest'
 
-                    // JS lint/tests
+                    // Lint
+                    sh '. venv/bin/activate && flake8 . --exclude venv,node_modules'
+
+                    // Only run pytest if there are any test_*.py files under tests/
+                    script {
+                        def hasPyTests = sh(
+          script: "find . -path './venv' -prune -o -name 'test_*.py' -print | head -1",
+          returnStdout: true
+        ).trim()
+                        if (hasPyTests) {
+                            sh '. venv/bin/activate && pytest'
+        } else {
+                            echo 'No Python tests found; skipping pytest'
+                        }
+                    }
+
+                    // JS stuff
                     sh 'npm install'
                     sh 'npx eslint .'
                 }
