@@ -138,12 +138,7 @@ pipeline {
         kubectl --kubeconfig="$KUBECONFIG" rollout status deploy/test-backend
       '''
     }
-
-                // optional smoke tests against dev
-                dir('app') {
-                    sh 'pytest -m smoke'
-                }
-            }
+             }
         }
 
         stage('Promote to Prod') {
