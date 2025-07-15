@@ -67,10 +67,17 @@ pipeline {
         stage('Lint & Test App') {
             steps {
                 dir('app') {
+                    // Ensure we have flake8 & pytest available
+                    sh 'pip install --upgrade pip'
+                    sh 'pip install flake8 pytest'
+
+                    // Run Python lint & tests
                     sh 'flake8 .'
+                    sh 'pytest'
+
+                    // Run JavaScript lint
                     sh 'npm install'
                     sh 'npx eslint .'
-                    sh 'pytest'
                 }
             }
         }
