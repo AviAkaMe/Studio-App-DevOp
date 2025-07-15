@@ -65,20 +65,18 @@ pipeline {
         }
 
         stage('Lint & Test App') {
-            agent {
-                docker {
-                    image 'python:3.11-slim'
-                    args  '-v $HOME/.cache/pip:/root/.cache/pip' // cache pip between runs
-                }
-            }
+            agent any
             steps {
                 dir('app') {
-                    // inside the Python container, we can pip install freely
-                    sh 'pip install --upgrade pip flake8 pytest'
-                    sh 'flake8 .'
-                    sh 'pytest'
+                    // Create and activate a Python virtualenv
+                    sh 'python3 -m venv venv'
+                    // Install lint/test tools into the venv
+                    sh '. venv/bin/activate && pip install --upgrade pip flake8 pytest'
+                    // Run Python lint & tests inside that venv
+                    sh '. venv/bin/activate && flake8 .'
+                    sh '. venv/bin/activate && pytest'
 
-                    // then your JS lint
+                    // JavaScript linting remains the same
                     sh 'npm install'
                     sh 'npx eslint .'
                 }
