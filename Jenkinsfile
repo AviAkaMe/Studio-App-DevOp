@@ -79,12 +79,15 @@ pipeline {
                     // Lint
                     sh '. venv/bin/activate && flake8 . --exclude venv,node_modules'
 
+                    // Smoke tests
+                    sh '. venv/bin/activate && pytest -m smoke'
+
                     // Only run npm/ESLint if package.json exists
                     script {
                         if (fileExists('package.json')) {
                             sh 'npm install'
                             sh 'npx eslint .'
-        } else {
+                        } else {
                             echo 'No package.json found; skipping npm install & ESLint'
                         }
                     }
