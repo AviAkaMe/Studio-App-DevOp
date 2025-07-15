@@ -118,14 +118,27 @@ pipeline {
 
         stage('Deploy to Dev') {
             steps {
+                // mount your secret kubeconfig file into $KUBECONFIG
                 withCredentials([file(
-                  credentialsId: env.KUBECONFIG_CRED,
-                  variable: 'KUBECONFIG'
-                )]) {
-                    // apply your k8s YAML from Config repo
-                    sh 'kubectl apply -f k8s/deployment.yaml'
-                    sh 'kubectl rollout status deploy/test-backend'
-                }
+      credentialsId: env.KUBECONFIG_CRED,
+      variable: 'KUBECONFIG'
+    )]) {
+                    // wrap everything in a single shell block
+                    sh '''
+        echo ">>> Using kubeconfig at $KUBECONFIG"
+        kubectl --kubeconfig="$KUBECONFIG" config view
+
+        echo ">>> Checking cluster connectivity"
+        kubectl --kubeconfig="$KUBECONFIG" get nodes
+
+        echo ">>> Applying deployment.yaml"
+        kubectl --kubeconfig="$KUBECONFIG" apply -f k8s/deployment.yaml
+
+        echo ">>> Waiting for rollout"
+        kubectl --kubeconfig="$KUBECONFIG" rollout status deploy/test-backend
+      '''
+    }
+
                 // optional smoke tests against dev
                 dir('app') {
                     sh 'pytest -m smoke'
