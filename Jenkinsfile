@@ -55,7 +55,12 @@ pipeline {
                || git show --pretty='' --name-only HEAD
             """
                     def changes = sh(script: diffCmd, returnStdout: true).trim()
-                    if (!changes.matches('(Jenkinsfile|k8s/|app/).*')) {
+                    def hasChanges = changes.readLines().any { line ->
+                        line.startsWith('Jenkinsfile') ||
+                        line.startsWith('k8s/')        ||
+                        line.startsWith('app/')
+                    }
+                    if (!hasChanges) {
                         echo 'No relevant changes; skipping.'
                         currentBuild.result = 'NOT_BUILT'
                         error('No relevant changes')
