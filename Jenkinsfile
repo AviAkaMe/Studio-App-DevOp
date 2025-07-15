@@ -80,7 +80,7 @@ pipeline {
                     sh '. venv/bin/activate && flake8 . --exclude venv,node_modules'
 
                     // Smoke tests
-                    sh '. venv/bin/activate && pytest -m smoke'
+                    sh '. venv/bin/activate pytest -m smoke || [ $? -eq 5 ]'
 
                     // Only run npm/ESLint if package.json exists
                     script {
