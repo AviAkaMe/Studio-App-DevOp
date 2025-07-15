@@ -68,15 +68,14 @@ pipeline {
             agent any
             steps {
                 dir('app') {
-                    // Create and activate a Python virtualenv
+                    // Create & activate venv
                     sh 'python3 -m venv venv'
-                    // Install lint/test tools into the venv
                     sh '. venv/bin/activate && pip install --upgrade pip flake8 pytest'
-                    // Run Python lint & tests inside that venv
-                    sh '. venv/bin/activate && flake8 .'
+                    // Only lint your code, exclude venv/ and node_modules/
+                    sh '. venv/bin/activate && flake8 . --exclude venv,node_modules'
                     sh '. venv/bin/activate && pytest'
 
-                    // JavaScript linting remains the same
+                    // JS lint/tests
                     sh 'npm install'
                     sh 'npx eslint .'
                 }
