@@ -96,7 +96,7 @@ pipeline {
             steps {
                 dir('app') {
                     script {
-                        docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDS) {
+                        docker.withRegistry('', DOCKER_CREDS) {
                             // build & push backend
                             def flaskImage = docker.build(
                       "${DOCKER_REGISTRY}/backend:${env.BUILD_NUMBER}",
