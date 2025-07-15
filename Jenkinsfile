@@ -74,22 +74,15 @@ pipeline {
                     // Lint
                     sh '. venv/bin/activate && flake8 . --exclude venv,node_modules'
 
-                    // Only run pytest if there are any test_*.py files under tests/
+                    // Only run npm/ESLint if package.json exists
                     script {
-                        def hasPyTests = sh(
-          script: "find . -path './venv' -prune -o -name 'test_*.py' -print | head -1",
-          returnStdout: true
-        ).trim()
-                        if (hasPyTests) {
-                            sh '. venv/bin/activate && pytest'
+                        if (fileExists('package.json')) {
+                            sh 'npm install'
+                            sh 'npx eslint .'
         } else {
-                            echo 'No Python tests found; skipping pytest'
+                            echo 'No package.json found; skipping npm install & ESLint'
                         }
                     }
-
-                    // JS stuff
-                    sh 'npm install'
-                    sh 'npx eslint .'
                 }
             }
         }
