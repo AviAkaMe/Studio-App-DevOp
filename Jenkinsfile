@@ -48,15 +48,15 @@ pipeline {
         stage('Detect DevOps Changes') {
             steps {
                 script {
-                    // only run on Jenkinsfile or k8s/ changes
+                    // only run when Jenkinsfile, k8s/, or app/ changes
                     def diffCmd = """
-                       git rev-parse --verify HEAD^ >/dev/null 2>&1 \
-                       && git diff --name-only HEAD^ HEAD \
-                       || git show --pretty='' --name-only HEAD
-                    """
+               git rev-parse --verify HEAD^ >/dev/null 2>&1 \
+               && git diff --name-only HEAD^ HEAD \
+               || git show --pretty='' --name-only HEAD
+            """
                     def changes = sh(script: diffCmd, returnStdout: true).trim()
-                    if (!changes.matches('(Jenkinsfile|k8s/).*')) {
-                        echo 'No DevOps changes; skipping.'
+                    if (!changes.matches('(Jenkinsfile|k8s/|app/).*')) {
+                        echo 'No relevant changes; skipping.'
                         currentBuild.result = 'NOT_BUILT'
                         error('No relevant changes')
                     }
@@ -124,7 +124,7 @@ pipeline {
                   variable: 'KUBECONFIG'
                 )]) {
                     sh 'kubectl apply -f k8s/deployment-prod.yaml'
-                    sh 'kubectl rollout status deploy/test-backend -n production' 
+                    sh 'kubectl rollout status deploy/test-backend -n production'
                 }
             }
         }
