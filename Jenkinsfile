@@ -128,8 +128,8 @@ pipeline {
         echo ">>> Using kubeconfig at $KUBECONFIG"
         kubectl --kubeconfig="$KUBECONFIG" config view
 
-        echo ">>> Checking cluster connectivity"
-        kubectl --kubeconfig="$KUBECONFIG" get nodes
+        echo ">>> Checking namespace connectivity"
+        kubectl --kubeconfig="$KUBECONFIG" get pods -n jenkins
 
         echo ">>> Applying deployment.yaml"
         kubectl --kubeconfig="$KUBECONFIG" apply -f k8s/deployment.yaml
